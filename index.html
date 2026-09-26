@@ -73,6 +73,8 @@
     .board-button[aria-pressed="true"] { border-color: var(--blue); background: var(--blue-soft); box-shadow: inset 0 0 0 1px rgba(0, 113, 227, .08); }
     .board-name { display: block; font-size: 14px; font-weight: 720; }
     .board-count { display: block; margin-top: 7px; color: var(--muted); font-size: 12px; }
+    .mobile-board-picker { display: none; }
+    .mobile-board-select { width: 100%; min-height: 48px; padding: 0 13px; border: 1px solid rgba(0, 113, 227, .28); border-radius: 13px; background: #fff; color: var(--text); font-size: 15px; font-weight: 650; }
     .segmented { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 5px; border-radius: 15px; background: #ececef; }
     .segment-button { min-height: 44px; padding: 8px 10px; border: 0; border-radius: 11px; background: transparent; color: var(--muted); cursor: pointer; font-size: 14px; font-weight: 650; }
     .segment-button[aria-pressed="true"] { background: #fff; color: var(--text); box-shadow: 0 2px 8px rgba(0, 0, 0, .08); }
@@ -127,7 +129,7 @@
     .result-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 470px; margin: 22px auto 0; }
     .result-actions .primary-button { margin: 0; }
     .review-title { margin: 38px 0 14px; font-size: 19px; }
-    .review-list { display: grid; gap: 10px; }
+    .review-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
     .review-item { display: grid; grid-template-columns: auto 1fr; gap: 12px; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255, 255, 255, .72); }
     .review-icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; font-size: 14px; font-weight: 800; }
     .review-icon.ok { background: var(--green-soft); color: var(--green); }
@@ -166,28 +168,77 @@
     .wrong-answer { margin-top: 6px; color: var(--red); font-size: 13px; }
     .correct-answer { margin-top: 3px; color: var(--green); font-size: 13px; }
     footer { padding: 24px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
-    @media (max-width: 700px) {
-      .app { width: min(100% - 20px, var(--content)); padding-top: calc(30px + env(safe-area-inset-top)); }
-      .hero-copy { font-size: 14px; }
-      .tabs { top: 6px; }
+    @media (max-width: 700px), (max-width: 900px) and (max-height: 500px) {
+      .app { width: min(100% - 16px, var(--content)); padding-top: calc(10px + env(safe-area-inset-top)); }
+      .hero { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; padding: 0 4px; text-align: left; }
+      .hero .eyebrow, .hero-copy, .hero-stats .stat-pill:not(#wrongStat) { display: none; }
+      .hero h1 { font-size: 25px; letter-spacing: -.04em; }
+      .hero-stats { flex: none; margin-top: 0; }
+      #wrongStat { min-height: 28px; padding: 5px 9px; font-size: 11px; }
+      .tabs { top: calc(4px + env(safe-area-inset-top)); gap: 3px; margin-bottom: 8px; padding: 4px; border-radius: 15px; }
       .tab-button { font-size: 13px; }
-      .board-grid { grid-template-columns: repeat(2, 1fr); }
-      .board-button:first-child { grid-column: span 2; }
-      .study-cards { grid-template-columns: repeat(2, 1fr); }
+      .panel { border-radius: 20px; }
+      .setup-panel, .study-panel, .list-panel, .result-panel { padding: 16px 14px; }
+      .setup-panel > .section-kicker, .setup-panel > .section-copy, .setup-panel .setting-note, .mode-description, .microcopy { display: none; }
+      .setup-panel h2 { font-size: 21px; }
+      .setting-block { margin-top: 14px; }
+      .setting-label { margin-bottom: 6px; font-size: 13px; }
+      .board-grid { display: none; }
+      .mobile-board-picker { display: block; }
+      .segmented { gap: 4px; padding: 4px; border-radius: 13px; }
+      .segment-button { min-height: 44px; }
+      .setup-panel > .primary-button { margin-top: 14px; }
+      .quiz-top { padding: 12px 14px 0; }
+      .progress-track { height: 4px; margin-top: 7px; }
+      .question-shell { padding: 14px 12px 16px; }
+      .question-prompt { min-height: 82px; margin: 4px 0 8px; font-size: clamp(32px, 10vw, 48px); }
+      .input-hint { min-height: 18px; margin-bottom: 8px; font-size: 11px; }
+      .choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .choice-button { min-height: 58px; padding: 9px 7px; font-size: 15px; }
+      .feedback { margin-top: 10px; padding: 9px 11px; font-size: 12px; }
+      .next-button { margin-top: 8px; }
+      .result-score { width: 100px; height: 100px; margin: 16px auto 8px; }
+      .result-score strong { font-size: 32px; }
+      .result-actions { margin-top: 14px; }
+      .review-title { margin: 22px 0 9px; font-size: 16px; }
+      .review-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+      .review-item { display: block; min-width: 0; padding: 8px; overflow-wrap: anywhere; }
+      .review-icon { width: 22px; height: 22px; margin-bottom: 6px; font-size: 11px; }
+      .review-question { font-size: 11px; line-height: 1.35; }
+      .review-meta { margin-top: 4px; font-size: 10px; line-height: 1.4; }
+      .review-explanation { margin-top: 5px; font-size: 10px; line-height: 1.45; }
+      .section-header { margin-bottom: 14px; }
+      .section-header .section-copy { display: none; }
+      .study-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 12px 0; }
+      .summary-card { min-width: 0; padding: 9px 7px; }
+      .summary-card strong { font-size: 18px; }
+      .summary-card span { font-size: 10px; line-height: 1.3; }
+      .study-groups { gap: 7px; }
+      .study-group summary { min-height: 48px; padding: 10px 12px; font-size: 13px; }
+      .study-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 0 8px 8px; }
+      .study-card { min-width: 0; min-height: 70px; padding: 8px; overflow-wrap: anywhere; }
+      .study-direction { font-size: 8px; }
+      .study-question { margin-top: 5px; font-size: 10px; line-height: 1.3; }
+      .study-answer { margin-top: 3px; font-size: 13px; line-height: 1.25; }
       .section-header { align-items: flex-start; flex-direction: column; }
-      .question-prompt { min-height: 124px; }
+      footer { display: none; }
+    }
+    @media (max-width: 900px) and (max-height: 500px) {
+      .app { padding-top: calc(4px + env(safe-area-inset-top)); }
+      .hero { display: none; }
+      .setup-panel h2 { display: none; }
+      .setting-block { margin-top: 8px; }
+      .setting-label { margin-bottom: 4px; }
+      .mobile-board-select { min-height: 44px; }
+      .setup-panel > .primary-button { margin-top: 8px; }
+      .quiz-top { padding-top: 8px; }
+      .question-shell { padding-top: 8px; padding-bottom: 10px; }
+      .question-prompt { min-height: 58px; }
     }
     @media (max-width: 470px) {
-      .setup-panel, .study-panel, .list-panel, .result-panel { padding: 20px 16px; }
-      .tabs { gap: 3px; padding: 5px; }
+      .setup-panel, .study-panel, .list-panel, .result-panel { padding: 14px 12px; }
       .tab-button { padding: 0 4px; font-size: 12px; }
-      .choice-grid, .result-actions { grid-template-columns: 1fr; }
-      .choice-button { min-height: 56px; }
-      .answer-form { flex-direction: column; }
-      .submit-button { width: 100%; }
-      .study-summary { grid-template-columns: 1fr; }
-      .study-cards { grid-template-columns: 1fr; }
-      .question-shell { padding-inline: 16px; }
+      .choice-grid, .result-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .record-item { align-items: start; }
     }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
@@ -217,6 +268,7 @@
           <p class="section-copy">“综合训练”会从全部板块均衡抽题；小板块会循环出现，适合集中强化。</p>
           <div class="setting-block">
             <div class="setting-label"><span>训练板块</span><span class="setting-note" id="selectedBoardNote">133 张可用题卡</span></div>
+            <div class="mobile-board-picker"><select class="mobile-board-select" id="mobileBoardSelect" aria-label="选择训练板块"></select></div>
             <div class="board-grid" id="boardGrid" aria-label="选择训练板块"></div>
           </div>
           <div class="setting-block">
@@ -371,7 +423,7 @@
       const $ = (selector) => document.querySelector(selector);
       const $$ = (selector) => [...document.querySelectorAll(selector)];
       const els = {
-        setup: $('#setupView'), quiz: $('#quizView'), result: $('#resultView'), boardGrid: $('#boardGrid'), selectedBoardNote: $('#selectedBoardNote'), modeDescription: $('#modeDescription'), start: $('#startButton'),
+        setup: $('#setupView'), quiz: $('#quizView'), result: $('#resultView'), boardGrid: $('#boardGrid'), mobileBoardSelect: $('#mobileBoardSelect'), selectedBoardNote: $('#selectedBoardNote'), modeDescription: $('#modeDescription'), start: $('#startButton'),
         progressText: $('#progressText'), progressBar: $('#progressBar'), sessionLabel: $('#sessionLabel'), tag: $('#questionTag'), prompt: $('#questionPrompt'), inputHint: $('#inputHint'), choiceArea: $('#choiceArea'), choiceGrid: $('#choiceGrid'),
         inputArea: $('#inputArea'), answerForm: $('#answerForm'), answerInput: $('#answerInput'), speedArea: $('#speedArea'), speedBefore: $('#speedBefore'), speedAfter: $('#speedAfter'), reveal: $('#revealButton'), revealedAnswer: $('#revealedAnswer'),
         speedAgain: $('#speedAgain'), speedKnow: $('#speedKnow'), feedback: $('#feedback'), next: $('#nextButton'), scoreNumber: $('#scoreNumber'), scoreFraction: $('#scoreFraction'), resultSummary: $('#resultSummary'), reviewList: $('#reviewList'),
@@ -392,7 +444,11 @@
       function renderBoards() {
         const entries = [{ key: 'all', label: '综合训练', color: '#0071e3', count: allQuestions.length }, ...boardMeta.map((b) => ({ ...b, count: banks[b.key].length }))];
         els.boardGrid.innerHTML = entries.map((board) => `<button class="board-button" type="button" data-board="${escapeHtml(board.key)}" aria-pressed="${settings.board === board.key}" style="--board-color:${board.color}"><span class="board-name">${escapeHtml(board.label)}</span><span class="board-count">${board.count} 张题卡</span></button>`).join('');
-        els.boardGrid.querySelectorAll('[data-board]').forEach((button) => button.addEventListener('click', () => { settings.board = button.dataset.board; renderBoards(); const count = settings.board === 'all' ? allQuestions.length : banks[settings.board].length; els.selectedBoardNote.textContent = `${count} 张可用题卡`; }));
+        els.mobileBoardSelect.innerHTML = entries.map((board) => `<option value="${escapeHtml(board.key)}">${escapeHtml(board.label)} · ${board.count} 张</option>`).join('');
+        els.mobileBoardSelect.value = settings.board;
+        const selectBoard = (key) => { settings.board = key; renderBoards(); const count = settings.board === 'all' ? allQuestions.length : banks[settings.board].length; els.selectedBoardNote.textContent = `${count} 张可用题卡`; };
+        els.boardGrid.querySelectorAll('[data-board]').forEach((button) => button.addEventListener('click', () => selectBoard(button.dataset.board)));
+        els.mobileBoardSelect.onchange = () => selectBoard(els.mobileBoardSelect.value);
       }
       function renderStudy() {
         els.studyGroups.innerHTML = boardMeta.map((board, index) => {
