@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>百化分训练</title>
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --card:#ffffff;
+    --text:#1d1d1f;
+    --sub:#6e6e73;
+    --line:#e5e5ea;
+    --blue:#0071e3;
+    --blue-soft:#eaf3ff;
+    --green:#34c759;
+    --red:#ff3b30;
+    --shadow:0 8px 30px rgba(0,0,0,.06);
+    --radius:24px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","PingFang SC","Helvetica Neue",sans-serif;
+  }
+  .wrap{
+    max-width:820px;
+    margin:0 auto;
+    padding:20px 16px 170px;
+  }
+  .topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:16px;
+    padding:6px 2px;
+  }
+  .topbar h1{
+    margin:0;
+    font-size:28px;
+    font-weight:700;
+    letter-spacing:-0.03em;
+  }
+  .topbar button{
+    border:0;
+    background:transparent;
+    color:var(--blue);
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .hero,.card{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+  .hero{
+    padding:24px;
+    margin-bottom:16px;
+  }
+  .hero .tag{
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:999px;
+    background:var(--blue-soft);
+    color:var(--blue);
+    font-size:12px;
+    font-weight:600;
+    margin-bottom:14px;
+  }
+  .hero h2{
+    margin:0 0 8px;
+    font-size:30px;
+    line-height:1.1;
+    letter-spacing:-0.03em;
+  }
+  .hero p{
+    margin:0;
+    color:var(--sub);
+    line-height:1.7;
+    font-size:14px;
+  }
+  .segmented{
+    display:flex;
+    gap:8px;
+    background:#f0f0f3;
+    border-radius:16px;
+    padding:6px;
+    margin-bottom:16px;
+  }
+  .segmented button{
+    flex:1;
+    border:0;
+    background:transparent;
+    border-radius:12px;
+    padding:10px 12px;
+    font-size:14px;
+    font-weight:600;
+    color:var(--sub);
+    cursor:pointer;
+    transition:.2s;
+  }
+  .segmented button.active{
+    background:#fff;
+    color:var(--text);
+    box-shadow:0 1px 4px rgba(0,0,0,.06);
+  }
+  .input-wrap{
+    display:none;
+    gap:10px;
+    margin-top:4px;
+  }
+  .input-wrap input{
+    flex:1;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:18px;
+    padding:16px 18px;
+    font-size:18px;
+    outline:none;
+    color:var(--text);
+  }
+  .input-wrap input:focus{border-color:#b9d8ff;box-shadow:0 0 0 4px rgba(0,113,227,.08)}
+  .submit{
+    border:0;
+    border-radius:18px;
+    background:var(--text);
+    color:#fff;
+    padding:0 22px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .speed-hint{
+    display:none;
+    margin-top:-8px;
+    margin-bottom:16px;
+    text-align:center;
+    color:var(--sub);
+    font-size:12px;
+  }
+  .filters{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+  select{
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--text);
+    border-radius:14px;
+    padding:10px 14px;
+    font-size:14px;
+    outline:none;
+  }
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:16px;
+  }
+  .stat{
+    background:var(--card);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    padding:18px 12px;
+    text-align:center;
+  }
+  .stat b{
+    display:block;
+    font-size:24px;
+    margin-bottom:6px;
+    letter-spacing:-0.03em;
+  }
+  .stat span{
+    color:var(--sub);
+    font-size:12px;
+  }
+  .card{
+    padding:22px;
+  }
+  .progress-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:10px;
+    font-size:13px;
+    color:var(--sub);
+  }
+  .progress{
+    height:8px;
+    background:#ececf1;
+    border-radius:999px;
+    overflow:hidden;
+    margin-bottom:24px;
+  }
+  .progress i{
+    display:block;
+    height:100%;
+    width:0%;
+    background:var(--blue);
+    border-radius:999px;
+    transition:.25s;
+  }
+  .qtype{
+    text-align:center;
+    color:var(--sub);
+    font-size:14px;
+    margin-bottom:12px;
+  }
+  .qmain{
+    text-align:center;
+    font-size:54px;
+    font-weight:700;
+    letter-spacing:-0.04em;
+    margin:0 0 26px;
+  }
+  .answers{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .ans{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:18px;
+    padding:16px 18px;
+    font-size:18px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.15s;
+    color:var(--text);
+  }
+  .ans:hover{transform:translateY(-1px)}
+  .ans.correct{
+    border-color:rgba(52,199,89,.35);
+    background:rgba(52,199,89,.10);
+    color:#14833b;
+  }
+  .ans.wrong{
+    border-color:rgba(255,59,48,.35);
+    background:rgba(255,59,48,.09);
+    color:#c12b22;
+  }
+  .explain{
+    margin-top:16px;
+    padding:16px 18px;
+    border-radius:18px;
+    background:#f7f7fa;
+    color:var(--sub);
+    line-height:1.7;
+    font-size:14px;
+    display:none;
+  }
+  .next{
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:96px;
+    width:min(788px,calc(100% - 32px));
+    margin:0;
+    border:0;
+    border-radius:18px;
+    background:var(--blue);
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    padding:15px;
+    cursor:pointer;
+    display:none;
+    z-index:30;
+    box-shadow:0 10px 28px rgba(0,113,227,.22);
+  }
+  .tabs{
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:18px;
+    width:min(560px,calc(100% - 24px));
+    background:rgba(255,255,255,.86);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(0,0,0,.06);
+    border-radius:22px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    padding:6px;
+  }
+  .tab{
+    border:0;
+    background:transparent;
+    border-radius:16px;
+    padding:12px 8px;
+    cursor:pointer;
+    color:var(--sub);
+    font-size:13px;
+    font-weight:600;
+  }
+  .tab.active{
+    background:#fff;
+    color:var(--text);
+  }
+  .panel{display:none}
+  .panel.active{display:block}
+  .memo-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+  }
+  .memo{
+    background:#fff;
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    padding:18px 10px;
+    text-align:center;
+  }
+  .memo b{
+    display:block;
+    font-size:22px;
+    margin-bottom:6px;
+    letter-spacing:-0.03em;
+  }
+  .memo span{
+    font-size:13px;
+    color:var(--sub);
+  }
+  .section-title{
+    font-size:26px;
+    font-weight:700;
+    letter-spacing:-0.03em;
+    margin:2px 0 16px;
+  }
+  .wrong-list{
+    display:grid;
+    gap:12px;
+  }
+  .wrong-item{
+    background:#fff;
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    padding:18px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .wrong-item small{
+    display:block;
+    margin-top:5px;
+    color:var(--sub);
+    font-size:12px;
+  }
+  .empty{
+    background:#fff;
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    padding:48px 20px;
+    text-align:center;
+    color:var(--sub);
+  }
+  @media (max-width:640px){
+    .topbar h1{font-size:24px}
+    .hero h2{font-size:26px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .answers{grid-template-columns:1fr}
+    .memo-grid{grid-template-columns:repeat(3,1fr)}
+    .qmain{font-size:46px}
+  }
+
+  .history-list{display:grid;gap:12px}
+  .history-card{
+    background:#fff;
+    border-radius:22px;
+    box-shadow:var(--shadow);
+    padding:18px 20px;
+  }
+  .history-top{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    align-items:flex-start;
+  }
+  .history-title{font-weight:700;font-size:17px}
+  .history-meta{color:var(--sub);font-size:12px;margin-top:5px}
+  .history-score{
+    font-weight:700;
+    font-size:22px;
+    color:var(--blue);
+    white-space:nowrap;
+  }
+  .history-details{
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+    display:grid;
+    gap:8px;
+  }
+  .history-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    font-size:13px;
+    color:var(--sub);
+  }
+  .history-row strong{color:var(--text)}
+  .review-box{
+    margin-top:16px;
+    display:grid;
+    gap:12px;
+  }
+  .review-item{
+    background:#f7f7fa;
+    border-radius:18px;
+    padding:16px 18px;
+  }
+  .review-item .r-head{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:center;
+    margin-bottom:8px;
+  }
+  .review-item .r-q{font-weight:700}
+  .review-item .r-badge{
+    font-size:12px;
+    padding:4px 8px;
+    border-radius:999px;
+    background:#ffe8e6;
+    color:#b8322a;
+  }
+  .review-item .r-line{
+    font-size:13px;
+    color:var(--sub);
+    line-height:1.7;
+  }
+
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <h1>百化分训练</h1>
+      <button onclick="restart()">重新开始</button>
+    </div>
+
+    <section id="practice" class="panel active">
+      <div class="hero">
+        <div class="tag">极简练习模式</div>
+        <h2>把百化分练成反应</h2>
+        <p>保留核心练习功能，用更简洁、更轻盈的苹果风界面来刷题。适合手机和电脑直接打开使用。</p>
+      </div>
+
+      <div class="segmented">
+        <button class="mode active" data-mode="mix">混合</button>
+        <button class="mode" data-mode="f2p">分→百</button>
+        <button class="mode" data-mode="p2f">百→分</button>
+      </div>
+
+      <div class="segmented" id="answerModeSeg">
+        <button class="answerMode active" data-answer="choice">选择模式</button>
+        <button class="answerMode" data-answer="input">输入模式</button>
+        <button class="answerMode" data-answer="speed">极速模式</button>
+      </div>
+
+      <div class="filters">
+        <select id="range">
+          <option value="basic">基础 1/2～1/12</option>
+          <option value="all">进阶 1/2～1/20</option>
+        </select>
+        <select id="rounds">
+          <option value="10">10题</option>
+          <option value="20">20题</option>
+          <option value="30">30题</option>
+        </select>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b id="score">0</b><span>答对</span></div>
+        <div class="stat"><b id="accuracy">0%</b><span>正确率</span></div>
+        <div class="stat"><b id="timer">00:00</b><span>用时</span></div>
+        <div class="stat"><b id="wrongCount">0</b><span>错题</span></div>
+      </div>
+
+      <div class="card">
+        <div class="progress-row">
+          <span>进度</span>
+          <span id="progressText">第 1 / 10 题</span>
+        </div>
+        <div class="progress"><i id="progressBar"></i></div>
+
+        <div class="qtype" id="qtype">请选择正确答案</div>
+        <div class="qmain" id="qmain">1/8</div>
+        <div class="answers" id="answers"></div>
+        <div class="input-wrap" id="inputWrap">
+          <input id="answerInput" type="text" inputmode="decimal" autocomplete="off" placeholder="输入答案，例如 12.5% 或 1/8">
+          <button class="submit" id="submitBtn">提交</button>
+        </div>
+        <div class="speed-hint" id="speedHint">极速模式：答对后自动进入下一题，答错会短暂停留</div>
+        <div class="explain" id="explain"></div>
+        <button class="next" id="nextBtn" onclick="nextQuestion()">下一题</button>
+      </div>
+    </section>
+
+    <section id="study" class="panel">
+      <div class="section-title">速记表</div>
+      <div class="memo-grid" id="memoGrid"></div>
+    </section>
+
+    <section id="wrong" class="panel">
+      <div class="section-title">错题本</div>
+      <div id="wrongList"></div>
+    </section>
+
+    <section id="history" class="panel">
+      <div class="section-title">历史记录</div>
+      <div id="historyList"></div>
+    </section>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="practice">练习</button>
+    <button class="tab" data-tab="study">速记</button>
+    <button class="tab" data-tab="wrong">错题</button>
+    <button class="tab" data-tab="history">历史</button>
+  </div>
+
+<script>
+const items = [
+  [2,"50%"],[3,"33.3%"],[4,"25%"],[5,"20%"],[6,"16.7%"],[7,"14.3%"],
+  [8,"12.5%"],[9,"11.1%"],[10,"10%"],[11,"9.1%"],[12,"8.3%"],
+  [13,"7.7%"],[14,"7.1%"],[15,"6.7%"],[16,"6.25%"],[17,"5.9%"],
+  [18,"5.6%"],[19,"5.3%"],[20,"5%"]
+];
+
+let mode = "mix";
+let answerMode = "choice";
+let state = {q:0, correct:0, current:null, answered:false, start:Date.now(), timer:null, wrong:0, answers:[], finalized:false};
+
+const $ = id => document.getElementById(id);
+const rand = arr => arr[Math.floor(Math.random()*arr.length)];
+
+document.querySelectorAll(".mode").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".mode").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active");
+    mode = btn.dataset.mode;
+    restart();
+  }
+});
+
+document.querySelectorAll(".answerMode").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".answerMode").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active");
+    answerMode = btn.dataset.answer;
+    restart();
+  }
+});
+
+$("submitBtn").onclick = ()=>submitInput();
+$("answerInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter") submitInput();
+});
+
+document.querySelectorAll(".tab").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+    btn.classList.add("active");
+    $(btn.dataset.tab).classList.add("active");
+    if(btn.dataset.tab==="wrong") renderWrong();
+    if(btn.dataset.tab==="history") renderHistory();
+  }
+});
+
+$("range").onchange = restart;
+$("rounds").onchange = restart;
+
+function pool(){
+  return $("range").value==="basic" ? items.slice(0,11) : items;
+}
+
+function makeQuestion(){
+  const p = pool();
+  const item = rand(p);
+  const type = mode==="mix" ? rand(["f2p","p2f"]) : mode;
+  let prompt, answer, choices = [];
+  if(type==="f2p"){
+    prompt = `1/${item[0]}`;
+    answer = item[1];
+    choices = [answer];
+    while(choices.length < 4){
+      const x = rand(p)[1];
+      if(!choices.includes(x)) choices.push(x);
+    }
+    $("qtype").textContent = "分数化百分数";
+  }else{
+    prompt = item[1];
+    answer = `1/${item[0]}`;
+    choices = [answer];
+    while(choices.length < 4){
+      const x = `1/${rand(p)[0]}`;
+      if(!choices.includes(x)) choices.push(x);
+    }
+    $("qtype").textContent = "百分数化分数";
+  }
+  choices.sort(()=>Math.random()-.5);
+  return {prompt, answer, choices, type, den:item[0], pct:item[1]};
+}
+
+function renderQuestion(){
+  state.answered = false;
+  state.current = makeQuestion();
+  $("qmain").textContent = state.current.prompt;
+  $("answers").innerHTML = "";
+  $("explain").style.display = "none";
+  $("nextBtn").style.display = "none";
+  $("inputWrap").style.display = answerMode==="choice" ? "none" : "flex";
+  $("speedHint").style.display = answerMode==="speed" ? "block" : "none";
+  $("answerInput").value = "";
+  $("answerInput").disabled = false;
+  $("submitBtn").disabled = false;
+  $("answerInput").placeholder = state.current.type==="f2p"
+    ? "只输入数字，例如 12.5"
+    : "只输入分母，例如 8";
+
+  if(answerMode==="choice"){
+    state.current.choices.forEach(c=>{
+      const b = document.createElement("button");
+      b.className = "ans";
+      b.textContent = c;
+      b.onclick = ()=>choose(b,c);
+      $("answers").appendChild(b);
+    });
+  } else {
+    setTimeout(()=>$("answerInput").focus(),50);
+  }
+  updateStats();
+}
+
+function choose(btn,val){
+  if(state.answered) return;
+  state.answered = true;
+  state.q++;
+  const ok = val === state.current.answer;
+
+  state.answers.push({
+    prompt: state.current.prompt,
+    correctAnswer: state.current.answer,
+    userAnswer: val,
+    ok,
+    type: state.current.type,
+    den: state.current.den,
+    pct: state.current.pct
+  });
+
+  if(ok){
+    state.correct++;
+    btn.classList.add("correct");
+  }else{
+    state.wrong++;
+    btn.classList.add("wrong");
+    [...document.querySelectorAll(".ans")].forEach(x=>{
+      if(x.textContent === state.current.answer) x.classList.add("correct");
+    });
+    saveWrong(state.current);
+  }
+
+  [...document.querySelectorAll(".ans")].forEach(x=>x.disabled=true);
+  updateStats();
+
+  const total = +$("rounds").value;
+
+  // 过程中不显示解析
+  $("explain").style.display = "none";
+  $("nextBtn").style.display = "none";
+
+  if(ok){
+    // 答对自动进入下一题
+    setTimeout(()=>{
+      if(state.q >= total) finishRound();
+      else renderQuestion();
+    }, 380);
+  }else{
+    // 答错时保留当前题，给用户看正确选项，再手动下一题
+    $("nextBtn").style.display = "block";
+    $("nextBtn").textContent = state.q >= total ? "查看本轮复盘" : "下一题";
+  }
+}
+
+function normalizeInput(v){
+  return v.trim().replace(/\s+/g,"").replace("％","%");
+}
+
+function submitInput(){
+  if(answerMode==="choice" || state.answered) return;
+  const raw = normalizeInput($("answerInput").value);
+  if(!raw) return;
+
+  state.answered = true;
+  state.q++;
+
+  let ok = false;
+  let normalizedUser = raw;
+
+  if(state.current.type==="f2p"){
+    // 分→百：只输入百分数数字，不需要 %
+    normalizedUser = raw.replace("%","");
+    const expectedNum = state.current.pct.replace("%","");
+    ok = normalizedUser === expectedNum;
+  }else{
+    // 百→分：只输入分母，不需要 1/
+    normalizedUser = raw.replace("1/","").replace("／","");
+    const expectedDen = String(state.current.den);
+    ok = normalizedUser === expectedDen;
+  }
+
+  state.answers.push({
+    prompt: state.current.prompt,
+    correctAnswer: state.current.answer,
+    userAnswer: normalizedUser,
+    ok,
+    type: state.current.type,
+    den: state.current.den,
+    pct: state.current.pct
+  });
+
+  if(ok) state.correct++;
+  else{
+    state.wrong++;
+    saveWrong(state.current);
+  }
+
+  $("answerInput").disabled = true;
+  $("submitBtn").disabled = true;
+  $("explain").style.display = "none";
+  $("nextBtn").style.display = "none";
+  updateStats();
+
+  const total = +$("rounds").value;
+
+  if(ok){
+    setTimeout(()=>{
+      if(state.q >= total) finishRound();
+      else renderQuestion();
+    }, answerMode==="speed" ? 260 : 380);
+  }else{
+    $("nextBtn").style.display = "block";
+    $("nextBtn").textContent = state.q >= total ? "查看本轮复盘" : "下一题";
+  }
+}
+
+function nextQuestion(){
+  const total = +$("rounds").value;
+  if(state.q >= total){
+    finishRound();
+  } else {
+    renderQuestion();
+  }
+}
+
+function finishRound(){
+  if(state.finalized) return;
+  state.finalized = true;
+  clearInterval(state.timer);
+
+  const total = state.q || 1;
+  const acc = Math.round(state.correct/total*100);
+  const elapsed = Math.floor((Date.now()-state.start)/1000);
+
+  saveHistory({
+    id: Date.now(),
+    date: new Date().toLocaleString("zh-CN", {hour12:false}),
+    total: state.q,
+    correct: state.correct,
+    wrong: state.wrong,
+    accuracy: acc,
+    seconds: elapsed,
+    mode,
+    answerMode,
+    answers: state.answers
+  });
+
+  $("qtype").textContent = "本轮完成";
+  $("qmain").textContent = acc + "%";
+  $("answers").innerHTML = "";
+  $("inputWrap").style.display = "none";
+  $("speedHint").style.display = "none";
+
+  const wrongs = state.answers.filter(x=>!x.ok);
+  const reviewHtml = wrongs.length
+    ? `<div class="review-box">${wrongs.map((x,i)=>`
+        <div class="review-item">
+          <div class="r-head">
+            <div class="r-q">${i+1}. ${x.prompt}</div>
+            <div class="r-badge">答错</div>
+          </div>
+          <div class="r-line">你的输入：${x.userAnswer}</div>
+          <div class="r-line">正确答案：${x.type==="f2p" ? x.pct.replace("%","") : x.den}</div>
+          <div class="r-line">记忆：${x.type==="f2p" ? `1/${x.den} ≈ ${x.pct}` : `${x.pct} ≈ 1/${x.den}`}</div>
+        </div>`).join("")}</div>`
+    : `<div class="review-box"><div class="review-item"><div class="r-line">本轮全对，没有错题。</div></div></div>`;
+
+  $("explain").innerHTML = `
+    本轮共完成 <strong>${state.q}</strong> 题，答对 <strong>${state.correct}</strong> 题，错题 <strong>${state.wrong}</strong> 题。
+    ${reviewHtml}
+  `;
+  $("explain").style.display = "block";
+
+  $("nextBtn").style.display = "block";
+  $("nextBtn").textContent = "再练一轮";
+  $("nextBtn").onclick = ()=>{
+    $("nextBtn").onclick = nextQuestion;
+    restart();
+  };
+}
+
+function updateStats(){
+  const total = +$("rounds").value;
+  $("score").textContent = state.correct;
+  $("accuracy").textContent = state.q ? Math.round(state.correct/state.q*100)+"%" : "0%";
+  $("wrongCount").textContent = state.wrong;
+  $("progressText").textContent = `第 ${Math.min(state.q+1,total)} / ${total} 题`;
+  $("progressBar").style.width = (state.q/total*100) + "%";
+}
+
+function updateTimer(){
+  const sec = Math.floor((Date.now()-state.start)/1000);
+  $("timer").textContent = String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0");
+}
+
+function restart(){
+  clearInterval(state.timer);
+  state = {q:0, correct:0, current:null, answered:false, start:Date.now(), timer:null, wrong:0, answers:[], finalized:false};
+  $("nextBtn").onclick = nextQuestion;
+  state.timer = setInterval(updateTimer,1000);
+  updateTimer();
+  renderQuestion();
+}
+
+function saveWrong(q){
+  let arr = JSON.parse(localStorage.getItem("bhf_wrong_apple") || "[]");
+  const key = q.prompt + "_" + q.answer;
+  const existing = arr.find(x=>x.key===key);
+  if(existing) existing.count = (existing.count||1)+1;
+  else arr.unshift({key, prompt:q.prompt, answer:q.answer, count:1});
+  localStorage.setItem("bhf_wrong_apple", JSON.stringify(arr.slice(0,60)));
+}
+
+function renderWrong(){
+  const arr = JSON.parse(localStorage.getItem("bhf_wrong_apple") || "[]");
+  if(!arr.length){
+    $("wrongList").innerHTML = '<div class="empty">暂时没有错题。</div>';
+    return;
+  }
+  $("wrongList").innerHTML = '<div class="wrong-list">'+arr.map(x=>`
+    <div class="wrong-item">
+      <div>
+        <div style="font-weight:600;font-size:18px">${x.prompt}</div>
+        <small>累计错 ${x.count} 次</small>
+      </div>
+      <div style="font-weight:700;color:var(--blue)">${x.answer}</div>
+    </div>
+  `).join("")+'</div>';
+}
+
+
+function saveHistory(entry){
+  let arr = JSON.parse(localStorage.getItem("bhf_history") || "[]");
+  arr.unshift(entry);
+  localStorage.setItem("bhf_history", JSON.stringify(arr.slice(0,100)));
+}
+
+function formatTime(sec){
+  const m = Math.floor(sec/60);
+  const s = sec%60;
+  return `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+}
+
+function modeLabel(v){
+  return v==="f2p" ? "分→百" : v==="p2f" ? "百→分" : "混合";
+}
+
+function answerModeLabel(v){
+  return v==="input" ? "输入模式" : v==="speed" ? "极速模式" : "选择模式";
+}
+
+function renderHistory(){
+  const arr = JSON.parse(localStorage.getItem("bhf_history") || "[]");
+  if(!arr.length){
+    $("historyList").innerHTML = '<div class="empty">还没有历史记录。</div>';
+    return;
+  }
+
+  $("historyList").innerHTML = '<div class="history-list">' + arr.map((h,idx)=>{
+    const wrongs = (h.answers||[]).filter(x=>!x.ok);
+    const details = wrongs.length
+      ? wrongs.map(x=>`
+          <div class="history-row">
+            <span><strong>${x.prompt}</strong> · 你输入 ${x.userAnswer}</span>
+            <span>正确 ${x.type==="f2p" ? x.pct.replace("%","") : x.den}</span>
+          </div>`).join("")
+      : `<div class="history-row"><span>本轮全对</span><span>无错题</span></div>`;
+
+    return `
+      <div class="history-card">
+        <div class="history-top">
+          <div>
+            <div class="history-title">第 ${arr.length-idx} 次练习</div>
+            <div class="history-meta">${h.date} · ${modeLabel(h.mode)} · ${answerModeLabel(h.answerMode)}</div>
+          </div>
+          <div class="history-score">${h.accuracy}%</div>
+        </div>
+        <div class="history-details">
+          <div class="history-row"><span>答对 / 总题数</span><span><strong>${h.correct} / ${h.total}</strong></span></div>
+          <div class="history-row"><span>用时</span><span><strong>${formatTime(h.seconds||0)}</strong></span></div>
+          ${details}
+        </div>
+      </div>`;
+  }).join("") + '</div>';
+}
+
+$("memoGrid").innerHTML = items.map(x=>`
+  <div class="memo"><b>1/${x[0]}</b><span>${x[1]}</span></div>
+`).join("");
+
+restart();
+</script>
+</body>
+</html>
